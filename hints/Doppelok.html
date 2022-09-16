@@ -1,0 +1,154 @@
+<body data-author="Doppelok">
+<div class="question-answer">
+    <div class="question">
+        I don't know how to start solving this mission
+    </div>
+    <div class="answer">
+        We'll start with the solution where we ended the last mission. If you haven't solved it yet, here is the link
+        <a href='https://py.checkio.org/en/mission/lightbulb-intro/'>Lightbulb Intro</a>.In this mission, the logic of
+        work is exactly the same as in the previous one, the only difference is that a new argument has been added
+        (the beginning of the countdown of the light bulb's operation time). So it is only necessary to change the
+        algorithm a little so that it counts starting from this argument, but if it is not there, then everything is
+        the same as last time.
+    </div>
+</div>
+<div class="question-answer">
+    <div class="question">
+        I need help to continue the mission
+    </div>
+    <div class="answer">
+        I will remind you of the final code of the last mission, and it will also be useful for you to read some information about:
+        <a href='https://docs.python.org/3.10/library/datetime.html'>datetime</a> module,
+        <a href='https://docs.python.org/3.10/library/functions.html#zip'>zip()</a>
+        (<a href='https://www.w3schools.com/python/ref_func_zip.asp'>example</a> ),
+        <a href='https://docs.python.org/3.10/library/functions.html#sum'>sum()</a>
+        (<a href='https://www.w3schools.com/python/ref_func_sum.asp'>example</a> ), and
+        <a href='https://docs.python.org/3.10/library/datetime.html?highlight=d%20total_seconds#datetime.timedelta.total_seconds'>datetime.total_seconds()</a>.
+        <pre class="brush: python">
+from datetime import datetime
+from typing import List
+
+def sum_light(els: List[datetime]) -> int:
+    result=0
+    els_1=els[1::2]
+    print(1, els_1)
+    for i in els_1:
+        result += int((i-els[els.index(i)-1]).total_seconds())
+    return result
+        </pre>
+    </div>
+</div>
+<div class="question-answer">
+    <div class="question">
+        Need help!
+    </div>
+    <div class="answer">
+        So, I propose to change the code of our previous solution a little, and add a check: if the start time of the
+        observation "start_watching" is passed to the function, then replace it with the time of turning on the light
+        bulb in our "els" list. What we'll change in the code: We'll add the variables "els_end" and "els_start" for
+        clarity (these are the lists with the lights on and off respectively) and remove our "result" variable.
+    <pre class="brush: python">
+from datetime import datetime
+from typing import List
+
+def sum_light(els: List[datetime], start_watching: Optional[datetime] = None) -> int:
+    els_end = els[1::2]
+    els_start = els[0::2]
+    # further abracadabra =)
+        </pre>
+  </div>
+</div>
+<div class="question-answer">
+    <div class="question">
+        I don't know what to do anymore. I need a little hint.
+    </div>
+    <div class="answer">
+        Since we need to check the time of turning on the light bulb, we will add a for loop and iterate through
+        "els_start" and compare using the if condition with the "start_watching" time.
+    <pre class="brush: python">
+from datetime import datetime
+from typing import List, Optional
+
+
+def sum_light(els: List[datetime], start_watching: Optional[datetime] = None) -> int:
+    els_end = els[1::2]
+    els_start = els[0::2]
+    for i in enumerate(els_start):
+        if ...  # Hocus pocus!!
+        </pre>
+  </div>
+</div>
+<div class="question-answer">
+    <div class="question">
+        Nothing works. SOS
+    </div>
+    <div class="answer">
+        Okay, in the condition we'll check for a parameter like "start_watching" and compare it to the items in the
+        "els_start" list. If the condition is fulfilled, then the list element "els_start" is replaced by "start_watching".
+    <pre class="brush: python">
+from datetime import datetime
+from typing import List, Optional
+
+
+def sum_light(els: List[datetime], start_watching: Optional[datetime] = None) -> int:
+    els_end = els[1::2]
+    els_start = els[0::2]
+    for i in enumerate(els_start):
+        if start_watching and start_watching > i[1]:
+            els_start[i[0]] = start_watching
+        </pre>
+  </div>
+</div>
+<div class="question-answer">
+    <div class="question">
+        I don't want to give up, help!
+    </div>
+    <div class="answer">
+        All you have to do is return the result of our function. Watch the hands =)
+        <br>
+        We will use the sum() and zip() functions. To the sum() function, we will pass a list generator that will
+        create for us a list of the differences between the lights on and off, provided that this difference > 0.
+        The list generator works on the basis of the expression zip(els_start, els_end), with its help we generate
+        pairs of ons and turning off the light bulb.
+    <pre class="brush: python">
+from datetime import datetime
+from typing import List, Optional
+
+
+def sum_light(els: List[datetime], start_watching: Optional[datetime] = None) -> int:
+    els_end = els[1::2]
+    els_start = els[0::2]
+    for i in enumerate(els_start):
+        if start_watching and start_watching > i[1]:
+            els_start[i[0]] = start_watching
+    return int(sum([(b - a).total_seconds() for a, b in zip(els_start, els_end)
+                    if (b - a).total_seconds() > 0]))
+        </pre>
+  </div>
+</div>
+<div class="question-answer">
+    <div class="question">
+        I want to be the best of the best PROGRAMMERS!!! SHOW ME MORE SOLUTIONS!!1!!!11!
+    </div>
+    <div class="answer">
+        Okay, okay! That's the spirit!=)
+        Here's a one-line version using the zip() function. Instead of our for loop with an if condition, we use
+        the max() function, in which we immediately check whether the argument "start_watching" is present and whether
+        it is greater than the time on and off (this allows us to get rid of checking whether (b - a).total_seconds() > 0 .
+    <pre class="brush: python">
+from datetime import datetime
+from typing import List, Optional
+
+def sum_light(els: List[datetime], start_watching: Optional[datetime] = None) -> int:
+    return sum(
+        (
+            max(start_watching or end, end) - max(start_watching or start, start)
+        ).total_seconds()
+        for start, end in zip(els[::2], els[1::2])
+    )
+        </pre>
+  </div>
+</div>
+
+
+</body>
