@@ -23,7 +23,7 @@
         (<a href='https://www.w3schools.com/python/ref_func_zip.asp'>example</a> ),
         <a href='https://docs.python.org/3.10/library/functions.html#sum'>sum()</a>
         (<a href='https://www.w3schools.com/python/ref_func_sum.asp'>example</a> ), and
-        <a href='https://docs.python.org/3.10/library/datetime.html?highlight=d%20total_seconds#datetime.timedelta.total_seconds'>datetime.total_seconds()</a>.
+        <a href='https://docs.python.org/3.10/library/datetime.html'>datetime.total_seconds()</a>.
         <pre class="brush: python">
 from datetime import datetime
 from typing import List
@@ -31,7 +31,6 @@ from typing import List
 def sum_light(els: List[datetime]) -> int:
     result=0
     els_1=els[1::2]
-    print(1, els_1)
     for i in els_1:
         result += int((i-els[els.index(i)-1]).total_seconds())
     return result
@@ -64,7 +63,9 @@ def sum_light(els: List[datetime], start_watching: Optional[datetime] = None) ->
     </div>
     <div class="answer">
         Since we need to check the time of turning on the light bulb, we will add a for loop and iterate through
-        "els_start" and compare using the if condition with the "start_watching" time.
+        "els_start" and compare using the if condition with the "start_watching" time. Let's use the
+        <a href='https://docs.python.org/3.10/library/functions.html#enumerate'>enumerate()</a> function here so
+        that the for loop runs in pairs (element index, element).
     <pre class="brush: python">
 from datetime import datetime
 from typing import List, Optional
